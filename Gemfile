@@ -22,6 +22,11 @@ gem 'jwt'
 # seriaization & json_api logic
 gem 'jsonapi.rb'
 
+gem 'csv'
+gem 'webpush'
+
+
+gem 'shutup'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

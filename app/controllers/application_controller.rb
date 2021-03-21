@@ -3,9 +3,16 @@ class ApplicationController < ActionController::API
 
   private
 
-  def current_user
-    user_id = JwtAuthenticationService.decode_token(request)
-    @user = User.find_by(id: user_id)
+  def current_user()
+    # user_id = JwtAuthenticationService.decode_token(request)
+    @user = User.find_by(email: params[:email])
+    puts "=============current_user==========#{params}"
+    if @user && @user.authenticate(params[:password])
+      @user.update_attribute('loggedin',true)
+      return @user.loggedin
+    else
+      render json: { error: 'Invalid email or password' }, status: :unprocessable_entity
+    end
   end
 
   def logged_in?
@@ -13,7 +20,12 @@ class ApplicationController < ActionController::API
   end
 
   def authorize!
-    return true if logged_in?
+    p'********************************'
+    p current_user()
+    p'********************************'
+
+    
+    return true if current_user()
 
     render json: { message: 'Please log in' }, status: :unauthorized
   end
